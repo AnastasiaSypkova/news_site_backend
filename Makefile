@@ -19,4 +19,4 @@ update: install migrate;
 
 .PHONY: startapp
 startapp:
-	poetry run python manage.py startapp
+	poetry run python manage.py startapp $(name)

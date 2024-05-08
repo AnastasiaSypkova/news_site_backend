@@ -24,3 +24,6 @@ Create migration\
 
 Apply migrations\
 ```make makemigrations```
+
+Start application\
+```make startapp name="application_name" ```
