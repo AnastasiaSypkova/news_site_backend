@@ -16,3 +16,7 @@ makemigrations:
 
 .PHONY: update
 update: install migrate;
+
+.PHONY: startapp
+startapp:
+	poetry run python manage.py startapp
