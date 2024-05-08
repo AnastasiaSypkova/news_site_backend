@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "news-site-backend"
+version = "0.1.0"
+description = ""
+authors = ["Anastasia Sypkova <a.sypkova@tg.dunice.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.6"
+djangorestframework = "^3.15.1"
+psycopg2 = "^2.9.9"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
+pre-commit = "^3.7.0"
+
+[tool.black]
+line-length = 79
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
