@@ -1,7 +1,12 @@
-from rest_framework import viewsets
+from rest_framework import serializers, viewsets
 
-from .models import Users
-from .serializers import UserSerializer
+from users.models import Users
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = "__all__"
 
 
 class UserViewSet(viewsets.ModelViewSet):
