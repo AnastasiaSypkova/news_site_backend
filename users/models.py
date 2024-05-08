@@ -14,7 +14,12 @@ class Users(models.Model):
         max_length=255, default=None, blank=True, null=True
     )
     email = models.EmailField(unique=True)
-    avatar_path = models.ImageField(upload_to=upload_to, blank=True, null=True)
+    avatar_path = models.ImageField(
+        upload_to=upload_to, blank=True, null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     password = models.CharField(max_length=50)
+
+    class Meta:
+        ordering = ["id"]
