@@ -79,10 +79,10 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "postgres",
-        "USER": "anastasiiasipkova",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "USER": "user",
+        "PASSWORD": "password",
+        "HOST": "host",
+        "PORT": "port",
     }
 }
 
@@ -127,3 +127,8 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+try:
+    from .local_settings import *  # noqa: F403, F401
+except ImportError:
+    pass
