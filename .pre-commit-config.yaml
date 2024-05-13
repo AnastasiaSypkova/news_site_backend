@@ -12,6 +12,7 @@ repos:
     rev: 7.0.0
     hooks:
     -   id: flake8
+        args: ["--per-file-ignores=users/migrations/0001_initial.py:E501"]
 -   repo: https://github.com/psf/black-pre-commit-mirror
     rev: 24.4.2
     hooks:
