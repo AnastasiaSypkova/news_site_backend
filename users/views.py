@@ -1,23 +1,9 @@
-from rest_framework import serializers, viewsets
-from rest_framework.permissions import (
-    SAFE_METHODS,
-    BasePermission,
-    IsAuthenticated,
-)
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
+from news_site_backend.permissions import ReadOnly
 from users.models import Users
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Users
-        fields = "__all__"
-        extra_kwargs = {"password": {"write_only": True}}
-
-
-class ReadOnly(BasePermission):
-    def has_permission(self, request, view):
-        return request.method in SAFE_METHODS
+from users.serializers import UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
