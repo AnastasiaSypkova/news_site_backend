@@ -27,3 +27,9 @@ Apply migrations\
 
 Start application\
 ```make startapp name="application_name" ```
+
+Run django tests\
+```make run-tests```
+
+Create superuser\
+```make createsuperuser```
