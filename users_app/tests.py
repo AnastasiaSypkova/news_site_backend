@@ -65,3 +65,24 @@ class UserApiTests(APITestCase):
         """
         status_code = self.client.get(self.base_url).status_code
         self.assertEqual(status_code, status.HTTP_200_OK)
+
+    def test_create_user(self):
+        """
+        Ensure we can create a new user by POST request
+        """
+        User = get_user_model()
+        user = User.objects.create_user(
+            email="normal@user.com", password="foo"
+        )
+        self.client.force_authenticate(user)
+        users_list = self.client.get(self.base_url).data
+        initial_len = len(users_list)
+
+        data = {"email": "new_user@maail.com", "password": "password"}
+        response = self.client.post(self.base_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        users_list = self.client.get(self.base_url).data
+        self.assertEqual(len(users_list), initial_len + 1)
+
+        self.assertEqual(User.objects.last().email, "new_user@maail.com")
