@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 
 class UsersManagersTests(TestCase):
@@ -48,3 +50,18 @@ class UsersManagersTests(TestCase):
             User.objects.create_superuser(
                 email="super@mail.ru", password="foo", is_superuser=False
             )
+
+
+class UserApiTests(APITestCase):
+    """
+    Tests for user api
+    """
+
+    base_url = "/users/"
+
+    def test_get_users(self):
+        """
+        Ensure we can read all users by GET request
+        """
+        status_code = self.client.get(self.base_url).status_code
+        self.assertEqual(status_code, status.HTTP_200_OK)
