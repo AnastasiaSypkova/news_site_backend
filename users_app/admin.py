@@ -6,7 +6,14 @@ from users_app.models import Users
 
 class CustomUserAdmin(UserAdmin):
     model = Users
-    list_display = ("email", "first_name", "last_name")
+    exclude = ("username",)
+    list_display = (
+        "email",
+        "first_name",
+        "last_name",
+        "created_at",
+        "updated_at",
+    )
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
@@ -18,7 +25,7 @@ class CustomUserAdmin(UserAdmin):
                 )
             },
         ),
-        ("Permissions", {"fields": ("is_admin",)}),
+        ("Permissions", {"fields": ("is_superuser",)}),
     )
 
     add_fieldsets = (
