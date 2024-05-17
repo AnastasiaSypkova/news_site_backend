@@ -82,11 +82,11 @@ WSGI_APPLICATION = "news_site_backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "name",
+        "NAME": "postgres",
         "USER": "user",
         "PASSWORD": "password",
         "HOST": "host",
-        "PORT": "5432",
+        "PORT": "port",
     }
 }
 
