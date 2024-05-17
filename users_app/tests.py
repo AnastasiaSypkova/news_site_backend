@@ -13,8 +13,8 @@ class UsersManagersTests(TestCase):
         """
         Test for creating a simple user
         """
-        User = get_user_model()
-        user = User.objects.create_user(
+        MyUser = get_user_model()
+        user = MyUser.objects.create_user(
             email="normal@user.com", password="foo"
         )
         self.assertEqual(user.email, "normal@user.com")
@@ -26,11 +26,11 @@ class UsersManagersTests(TestCase):
         except AttributeError:
             pass
         with self.assertRaises(TypeError):
-            User.objects.create_user()
+            MyUser.objects.create_user()
         with self.assertRaises(ValueError):
-            User.objects.create_user(email="")
+            MyUser.objects.create_user(email="")
         with self.assertRaises(ValueError):
-            User.objects.create_user(email="", password="foo")
+            MyUser.objects.create_user(email="", password="foo")
 
     def test_create_superuser(self):
         """

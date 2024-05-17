@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from users_app.models import Users
+from users_app.models import MyUser
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
         return super(UserSerializer, self).create(validated_data)
 
     class Meta:
-        model = Users
+        model = MyUser
         fields = [
             "id",
             "first_name",

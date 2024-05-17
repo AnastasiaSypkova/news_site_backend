@@ -50,7 +50,7 @@ def upload_to(instance, filename):
     return "/".join(["images", str(instance.avatar_path), filename])
 
 
-class Users(AbstractUser):
+class MyUser(AbstractUser):
     username = None
     avatar_path = models.ImageField(upload_to=upload_to, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
