@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "users",
+    "users_app",
     "rest_framework_simplejwt",
 ]
 
@@ -82,11 +82,11 @@ WSGI_APPLICATION = "news_site_backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "postgres",
+        "NAME": "name",
         "USER": "user",
         "PASSWORD": "password",
         "HOST": "host",
-        "PORT": "port",
+        "PORT": "5432",
     }
 }
 
@@ -134,10 +134,12 @@ MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "users.Users"
+AUTH_USER_MODEL = "users_app.MyUser"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     )
 }
