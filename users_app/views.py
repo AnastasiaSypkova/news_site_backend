@@ -10,3 +10,8 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated | ReadOnly]
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return []
+        return super().get_permissions()

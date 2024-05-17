@@ -71,10 +71,7 @@ class UserApiTests(APITestCase):
         Ensure we can create a new user by POST request
         """
         MyUser = get_user_model()
-        user = MyUser.objects.create_user(
-            email="normal@user.com", password="foo"
-        )
-        self.client.force_authenticate(user)
+
         users_list = self.client.get(self.base_url).data
         initial_len = len(users_list)
 
