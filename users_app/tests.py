@@ -36,8 +36,8 @@ class UsersManagersTests(TestCase):
         """
         Test for creating a superuser
         """
-        User = get_user_model()
-        admin_user = User.objects.create_superuser("super@mail.ru", "foo")
+        MyUser = get_user_model()
+        admin_user = MyUser.objects.create_superuser("super@mail.ru", "foo")
         self.assertEqual(admin_user.email, "super@mail.ru")
         self.assertTrue(admin_user.is_active)
         self.assertTrue(admin_user.is_staff)
@@ -47,7 +47,7 @@ class UsersManagersTests(TestCase):
         except AttributeError:
             pass
         with self.assertRaises(ValueError):
-            User.objects.create_superuser(
+            MyUser.objects.create_superuser(
                 email="super@mail.ru", password="foo", is_superuser=False
             )
 
@@ -70,8 +70,8 @@ class UserApiTests(APITestCase):
         """
         Ensure we can create a new user by POST request
         """
-        User = get_user_model()
-        user = User.objects.create_user(
+        MyUser = get_user_model()
+        user = MyUser.objects.create_user(
             email="normal@user.com", password="foo"
         )
         self.client.force_authenticate(user)
@@ -85,4 +85,4 @@ class UserApiTests(APITestCase):
         users_list = self.client.get(self.base_url).data
         self.assertEqual(len(users_list), initial_len + 1)
 
-        self.assertEqual(User.objects.last().email, "new_user@maail.com")
+        self.assertEqual(MyUser.objects.last().email, "new_user@maail.com")
