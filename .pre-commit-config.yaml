@@ -12,13 +12,24 @@ repos:
     rev: 7.0.0
     hooks:
     -   id: flake8
+        args: ["--per-file-ignores=users/migrations/0001_initial.py:E501"]
 -   repo: https://github.com/psf/black-pre-commit-mirror
     rev: 24.4.2
     hooks:
     - id: black
       language_version: python3.12
+      args: ["--line-length=79"]
 -   repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
     - id: isort
       name: isort (python)
+      args: ["--profile", "black", "--filter-files", "--line-length=79"]
+-   repo: local
+    hooks:
+      - id: django-test
+        name: django-test
+        entry: poetry run python manage.py test
+        always_run: true
+        pass_filenames: false
+        language: system

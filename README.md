@@ -24,3 +24,12 @@ Create migration\
 
 Apply migrations\
 ```make makemigrations```
+
+Start application\
+```make startapp name="application_name" ```
+
+Run django tests\
+```make run-tests```
+
+Create superuser\
+```make createsuperuser```

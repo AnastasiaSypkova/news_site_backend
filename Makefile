@@ -19,4 +19,12 @@ update: install migrate;
 
 .PHONY: startapp
 startapp:
-	poetry run python manage.py startapp
+	poetry run python manage.py startapp $(name)
+
+.PHONY: run-tests
+run-tests:
+	poetry run python manage.py test
+
+.PHONY: createsuperuser
+createsuperuser:
+	poetry run python manage.py createsuperuser
