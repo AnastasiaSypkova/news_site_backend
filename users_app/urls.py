@@ -1,7 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from users_app.views import MyTokenObtainPairView, UserViewSet
+from users_app.views import (
+    GetUserByTokenView,
+    MyTokenObtainPairView,
+    UserViewSet,
+)
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
@@ -14,6 +18,7 @@ urlpatterns = [
         MyTokenObtainPairView.as_view(),
         name="token_obtain_pair",
     ),
+    path("auth/whoami/", GetUserByTokenView.as_view(), name="whoami"),
     path("", include(router.urls)),
     path(
         "api-auth/", include("rest_framework.urls", namespace="rest_framework")
