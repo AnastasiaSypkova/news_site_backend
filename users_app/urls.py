@@ -19,8 +19,8 @@ urlpatterns = [
         name="token_obtain_pair",
     ),
     path("auth/whoami/", GetUserByTokenView.as_view(), name="whoami"),
-    path("", include(router.urls)),
     path(
         "api-auth/", include("rest_framework.urls", namespace="rest_framework")
     ),
+    path("", include(router.urls)),
 ]
