@@ -21,10 +21,9 @@ class UsersManagersTests(TestCase):
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
-        try:
-            self.assertIsNone(user.username)
-        except AttributeError:
-            pass
+
+        self.assertIsNone(user.username)
+
         with self.assertRaises(TypeError):
             MyUser.objects.create_user()
         with self.assertRaises(ValueError):
@@ -42,10 +41,8 @@ class UsersManagersTests(TestCase):
         self.assertTrue(admin_user.is_active)
         self.assertTrue(admin_user.is_staff)
         self.assertTrue(admin_user.is_superuser)
-        try:
-            self.assertIsNone(admin_user.username)
-        except AttributeError:
-            pass
+
+        self.assertIsNone(admin_user.username)
         with self.assertRaises(ValueError):
             MyUser.objects.create_superuser(
                 email="super@mail.ru", password="foo", is_superuser=False
