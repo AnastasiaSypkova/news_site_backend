@@ -1,18 +1,9 @@
-from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
 from users_app.models import MyUser
 
 
 class UserSerializer(serializers.ModelSerializer):
-    def create(self, validated_data):
-        if not validated_data["password"].startswith(
-            ("pbkdf2_sha256$", "bcrypt$", "argon2")
-        ):
-            validated_data["password"] = make_password(
-                validated_data["password"]
-            )
-        return super(UserSerializer, self).create(validated_data)
 
     class Meta:
         model = MyUser
