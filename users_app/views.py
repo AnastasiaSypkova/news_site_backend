@@ -9,6 +9,8 @@ from users_app.serializers import MyTokenObtainPairSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    """Viewset for endpoints assotiated with user model"""
+
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [
@@ -23,6 +25,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
+    """View for auth/login endpoint
+
+    Get email and password
+    Returns refresh, access tokens and user data
+    """
+
     serializer_class = MyTokenObtainPairSerializer
 
 

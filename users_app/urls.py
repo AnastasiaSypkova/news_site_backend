@@ -12,7 +12,7 @@ router.register(r"users", UserViewSet)
 
 signup_user = UserViewSet.as_view({"post": "create"})
 urlpatterns = [
-    path("auth/signup", signup_user, name="sign_up_user"),
+    path("auth/signup/", signup_user, name="sign_up_user"),
     path(
         "auth/login/",
         MyTokenObtainPairView.as_view(),

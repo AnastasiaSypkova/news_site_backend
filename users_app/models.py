@@ -7,10 +7,19 @@ from users_app.managers import MyUserManager
 
 
 def upload_to(instance, filename):
+    """
+    Defines path to upload image files
+    """
     return "/".join(["images", str(instance.avatar_path), filename])
 
 
 class MyUser(AbstractUser):
+    """
+    Custom model for user where
+
+    email is unique identifier instead of username
+    """
+
     username = None
     avatar_path = models.ImageField(upload_to=upload_to, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
