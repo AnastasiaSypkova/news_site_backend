@@ -1,9 +1,10 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from news_site_backend.permissions import ReadOnly, UpdateOwnProfile
 from users_app.models import MyUser
-from users_app.serializers import UserSerializer
+from users_app.serializers import MyTokenObtainPairSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -18,3 +19,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if self.request.method == "POST":
             return []
         return super().get_permissions()
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
