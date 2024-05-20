@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "users_app",
     "rest_framework_simplejwt",
+    "posts_app",
 ]
 
 MIDDLEWARE = [
