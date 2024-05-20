@@ -1,9 +1,13 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from users_app.models import MyUser
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for custom user model
+    """
 
     class Meta:
         model = MyUser
@@ -18,3 +22,18 @@ class UserSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         extra_kwargs = {"password": {"write_only": True}}
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Serializer for custom token response
+
+    It returns access token, refresh token and user data
+    """
+
+    def validate(self, attrs):
+        data = super(MyTokenObtainPairSerializer, self).validate(attrs)
+
+        data.update({"user": UserSerializer(self.user).data})
+
+        return data
