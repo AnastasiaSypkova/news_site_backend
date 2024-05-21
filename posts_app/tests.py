@@ -161,3 +161,42 @@ class PostsApiTestsPublic(APITestCase):
             self.base_url, post_data, format="multipart"
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def create_post(self) -> int:
+        """
+        Helper function creates authenticated user that creates post
+
+        Returns post id
+        """
+        MyUser = get_user_model()
+        self.user = MyUser.objects.create_user(
+            "authenticated_usere@mail.ru", "password"
+        )
+        self.client.force_authenticate(user=self.user)
+        path_to_test_image = "./posts_app/defaultImage.jpeg"
+        file = File(open(path_to_test_image, "rb"))
+        uploaded_file = SimpleUploadedFile(
+            "new_image.jpg", file.read(), content_type="multipart/form-data"
+        )
+
+        post_data = {
+            "title": "Post for editing",
+            "text": "Post for edit text",
+            "cover_path": uploaded_file,
+            "tags": "tag1 tag2",
+        }
+        self.client.post(self.base_url, post_data, format="multipart")
+        post_id = Posts.objects.all()[0].id
+        self.client.logout()
+        return post_id
+
+    def test_edit_post(self):
+        """
+        Ensure the user can't send PATCH request if he is anauthenticated
+        """
+        post_id = self.create_post()
+        edited_post_data = {"title": "Edited Title"}
+        response = self.client.patch(
+            f"{self.base_url} {post_id}/", edited_post_data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
