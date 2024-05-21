@@ -58,7 +58,9 @@ class PostsApiTestsPrivate(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def create_post(self) -> int:
-        """Creates post and returns post_id"""
+        """
+        Helper function that creates post and returns post_id
+        """
         path_to_test_image = "./posts_app/defaultImage.jpeg"
         file = File(open(path_to_test_image, "rb"))
         uploaded_file = SimpleUploadedFile(
@@ -109,6 +111,17 @@ class PostsApiTestsPrivate(APITestCase):
         self.client.force_authenticate(user=self.user)
         post_id = self.create_post()
         response = self.client.delete(
-            f"{self.base_url} {post_id}/", format="json"
+            f"{self.base_url}{post_id}/", format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_delete_another_user_post(self):
+        """
+        Ensure that user can't delete anothers users posts
+        """
+        post_id = self.create_post()
+        self.client.force_authenticate(user=self.second_user)
+        response = self.client.delete(
+            f"{self.base_url}{post_id}/", format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
