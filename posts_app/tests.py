@@ -125,3 +125,18 @@ class PostsApiTestsPrivate(APITestCase):
             f"{self.base_url}{post_id}/", format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class PostsApiTestsPublic(APITestCase):
+    """
+    Tests for posts api where the user is unauthenticated
+    """
+
+    base_url = "/users/"
+
+    def test_get_posts(self):
+        """
+        Ensure we can read all posts by GET request if we anonymous
+        """
+        status_code = self.client.get(self.base_url).status_code
+        self.assertEqual(status_code, status.HTTP_200_OK)
