@@ -15,12 +15,14 @@ class Posts(models.Model):
     Model for Posts
     """
 
-    id = models.BigIntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
+    text = models.TextField(null=False, blank=False)
     cover_path = models.ImageField(
-        upload_to=upload_cover, blank=True, null=True
+        upload_to=upload_cover, blank=False, null=False
     )
     author = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    comments_count = models.IntegerField()
+    comments_count = models.IntegerField(default=0)
+    tags = models.CharField(max_length=255)

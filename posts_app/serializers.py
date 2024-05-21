@@ -10,4 +10,11 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Posts
-        fields = "__all__"
+        exclude = [
+            "author",
+        ]
+        extra_kwargs = {"comments_count": {"read_only": True}}
+
+    def create(self, validated_data):
+        validated_data["author"] = self.context["request"].user
+        return super().create(validated_data)
