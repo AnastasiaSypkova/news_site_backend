@@ -126,6 +126,21 @@ class PostsApiTestsPrivate(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_pagination(self):
+        """
+        Test pagination with limit and offset params
+        """
+        limit = 2
+        offset = 2
+        paginated_url = f"{self.base_url}?{limit=}&{offset=}"
+        for i in range(limit * offset):
+            _ = self.create_post()
+        response = self.client.get(paginated_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], limit * offset)
+        self.assertEqual(len(response.data["results"]), limit)
+
 
 class PostsApiTestsPublic(APITestCase):
     """
