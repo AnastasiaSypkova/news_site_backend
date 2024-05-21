@@ -32,3 +32,15 @@ class UpdateOwnProfile(BasePermission):
                 return obj.id == request.user.id
         else:
             return False
+
+
+class EditeOwnPost(BasePermission):
+    """
+    Grant user permission to edit or delete its own news
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if request.user:
+            return obj.author.id == request.user.id
+        else:
+            return False
