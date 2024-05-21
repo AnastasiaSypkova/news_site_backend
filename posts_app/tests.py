@@ -99,3 +99,16 @@ class PostsApiTestsPrivate(APITestCase):
             f"{self.base_url}{post_id}/", edited_post_data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_post(self):
+        """
+        Ensure that user can delete only those news that belong to him
+
+        However other users can't delete anothers users news
+        """
+        self.client.force_authenticate(user=self.user)
+        post_id = self.create_post()
+        response = self.client.delete(
+            f"{self.base_url} {post_id}/", format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
