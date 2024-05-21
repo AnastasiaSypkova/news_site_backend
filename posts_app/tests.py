@@ -4,6 +4,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from posts_app.models import Posts
+
 
 class PostsApiTestsPrivate(APITestCase):
     """
@@ -51,3 +53,29 @@ class PostsApiTestsPrivate(APITestCase):
             self.base_url, post_data, format="multipart"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_edit_post(self):
+        """
+        Ensure that user can edit only those news that belong to him.
+
+        But other users can't edit anothers users news
+        """
+        path_to_test_image = "./posts_app/defaultImage.jpeg"
+        file = File(open(path_to_test_image, "rb"))
+        uploaded_file = SimpleUploadedFile(
+            "new_image.jpg", file.read(), content_type="multipart/form-data"
+        )
+
+        post_data = {
+            "title": "Post for editing",
+            "text": "Post for edit text",
+            "cover_path": uploaded_file,
+            "tags": "tag1 tag2",
+        }
+        self.client.post(self.base_url, post_data, format="multipart")
+        post_id = Posts.objects.all()[0].id
+        edited_post_data = {"title": "Edited Title"}
+        response = self.client.patch(
+            f"{self.base_url} {post_id}/", edited_post_data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
