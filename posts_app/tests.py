@@ -192,11 +192,21 @@ class PostsApiTestsPublic(APITestCase):
 
     def test_edit_post(self):
         """
-        Ensure the user can't send PATCH request if he is anauthenticated
+        Ensure the user can't send PATCH request if he is unauthenticated
         """
         post_id = self.create_post()
         edited_post_data = {"title": "Edited Title"}
         response = self.client.patch(
             f"{self.base_url} {post_id}/", edited_post_data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_delete_post(self):
+        """
+        Ensure that user can't send DELETE request if he is unauthenticated
+        """
+        post_id = self.create_post()
+        response = self.client.delete(
+            f"{self.base_url}{post_id}/", format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
