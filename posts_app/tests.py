@@ -24,6 +24,9 @@ class PostsApiTestsPrivate(APITestCase):
         self.user = MyUser.objects.create_user(
             "authenticated_usere@mail.ru", "password"
         )
+        self.second_user = MyUser.objects.create_user(
+            "second_user@mail.ru", "password1234"
+        )
         self.client.force_authenticate(user=self.user)
 
     def test_get_posts(self):
@@ -54,12 +57,8 @@ class PostsApiTestsPrivate(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_edit_post(self):
-        """
-        Ensure that user can edit only those news that belong to him.
-
-        But other users can't edit anothers users news
-        """
+    def create_post(self) -> int:
+        """Creates post and returns post_id"""
         path_to_test_image = "./posts_app/defaultImage.jpeg"
         file = File(open(path_to_test_image, "rb"))
         uploaded_file = SimpleUploadedFile(
@@ -74,8 +73,29 @@ class PostsApiTestsPrivate(APITestCase):
         }
         self.client.post(self.base_url, post_data, format="multipart")
         post_id = Posts.objects.all()[0].id
+        return post_id
+
+    def test_edit_post(self):
+        """
+        Ensure that user can edit only those news that belong to him.
+
+        But other users can't edit anothers users news
+        """
+        post_id = self.create_post()
         edited_post_data = {"title": "Edited Title"}
         response = self.client.patch(
             f"{self.base_url} {post_id}/", edited_post_data, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_edit_another_user_post(self):
+        """
+        Ensure that user can't edit anothers users posts
+        """
+        post_id = self.create_post()
+        self.client.force_authenticate(user=self.second_user)
+        edited_post_data = {"title": "Edited Title"}
+        response = self.client.patch(
+            f"{self.base_url}{post_id}/", edited_post_data, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
