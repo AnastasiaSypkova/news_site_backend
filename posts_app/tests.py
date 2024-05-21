@@ -132,7 +132,7 @@ class PostsApiTestsPublic(APITestCase):
     Tests for posts api where the user is unauthenticated
     """
 
-    base_url = "/users/"
+    base_url = "/posts/"
 
     def test_get_posts(self):
         """
@@ -140,3 +140,24 @@ class PostsApiTestsPublic(APITestCase):
         """
         status_code = self.client.get(self.base_url).status_code
         self.assertEqual(status_code, status.HTTP_200_OK)
+
+    def test_create_post(self):
+        """
+        Ensure the unauthenticated user can't create a new post by POST request
+        """
+        path_to_test_image = "./posts_app/defaultImage.jpeg"
+        file = File(open(path_to_test_image, "rb"))
+        uploaded_file = SimpleUploadedFile(
+            "new_image.jpg", file.read(), content_type="multipart/form-data"
+        )
+
+        post_data = {
+            "title": "Post for editing",
+            "text": "Post for edit text",
+            "cover_path": uploaded_file,
+            "tags": "tag1 tag2",
+        }
+        response = self.client.post(
+            self.base_url, post_data, format="multipart"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
