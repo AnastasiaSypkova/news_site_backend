@@ -168,11 +168,13 @@ class PostsApiTestsPrivate(APITestCase):
         example: GET /posts/?author=Masha
         """
         self.client.force_authenticate(self.user)
-        _ = self.create_post(title=f"{self.user.first_name}' Post")
-        _ = self.create_post(title=f"{self.user.first_name}' Post")
+        _ = self.create_post(title=f"{self.user.first_name}' Post Number One")
+        _ = self.create_post(title=f"{self.user.first_name}' Post Number Two")
 
         self.client.force_authenticate(self.second_user)
-        _ = self.create_post(title=f"{self.second_user.first_name}' Post")
+        _ = self.create_post(
+            title=f"{self.second_user.first_name}' Post Single"
+        )
 
         response = self.client.get(
             f"{self.base_url}?author={self.user.first_name}"
@@ -191,11 +193,13 @@ class PostsApiTestsPrivate(APITestCase):
         example: GET /posts/?authorId=31
         """
         self.client.force_authenticate(self.user)
-        _ = self.create_post(title=f"{self.user.first_name}' Post")
-        _ = self.create_post(title=f"{self.user.first_name}' Post")
+        _ = self.create_post(title=f"{self.user.first_name}' Post Number One")
+        _ = self.create_post(title=f"{self.user.first_name}' Post Number Two")
 
         self.client.force_authenticate(self.second_user)
-        _ = self.create_post(title=f"{self.second_user.first_name}' Post")
+        _ = self.create_post(
+            title=f"{self.second_user.first_name}' Post Single"
+        )
 
         response = self.client.get(f"{self.base_url}?authorId={self.user.id}")
         self.assertEqual(len(response.data), 2)
@@ -212,11 +216,13 @@ class PostsApiTestsPrivate(APITestCase):
         example: GET /posts/?email=ivan.ivanov@mail.ru
         """
         self.client.force_authenticate(self.user)
-        _ = self.create_post(title=f"{self.user.first_name}' Post")
-        _ = self.create_post(title=f"{self.user.first_name}' Post")
+        _ = self.create_post(title=f"{self.user.first_name}' Post Number One")
+        _ = self.create_post(title=f"{self.user.first_name}' Post Number Two")
 
         self.client.force_authenticate(self.second_user)
-        _ = self.create_post(title=f"{self.second_user.first_name}' Post")
+        _ = self.create_post(
+            title=f"{self.second_user.first_name}' Post Single"
+        )
 
         response = self.client.get(f"{self.base_url}?email={self.user.email}")
         self.assertEqual(len(response.data), 2)
