@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from news_site_backend.permissions import EditeOwnPost, ReadOnly
@@ -16,6 +16,8 @@ class PostsViewSet(viewsets.ModelViewSet):
 
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated | ReadOnly, EditeOwnPost | ReadOnly]
+    search_fields = ["title", "text"]
+    filter_backends = (filters.SearchFilter,)
 
     def get_queryset(self):
         """
