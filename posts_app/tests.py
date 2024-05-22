@@ -22,10 +22,16 @@ class PostsApiTestsPrivate(APITestCase):
         """
         MyUser = get_user_model()
         self.user = MyUser.objects.create_user(
-            "authenticated_usere@mail.ru", "password"
+            "authenticated_usere@mail.ru",
+            "password",
+            first_name="Masha",
+            last_name="Ivanova",
         )
         self.second_user = MyUser.objects.create_user(
-            "second_user@mail.ru", "password1234"
+            "second_user@mail.ru",
+            "password1234",
+            first_name="Ivan",
+            last_name="Petrov",
         )
         self.client.force_authenticate(user=self.user)
 
@@ -57,7 +63,7 @@ class PostsApiTestsPrivate(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def create_post(self) -> int:
+    def create_post(self, title="Post title", text="Post text") -> int:
         """
         Helper function that creates post and returns post_id
         """
@@ -68,8 +74,8 @@ class PostsApiTestsPrivate(APITestCase):
         )
 
         post_data = {
-            "title": "Post for editing",
-            "text": "Post for edit text",
+            "title": title,
+            "text": text,
             "cover_path": uploaded_file,
             "tags": "tag1 tag2",
         }
@@ -129,6 +135,8 @@ class PostsApiTestsPrivate(APITestCase):
     def test_pagination(self):
         """
         Test pagination with limit and offset params
+
+        example: GET /posts/?limit=2&offset=2
         """
         limit = 2
         offset = 2
@@ -140,6 +148,73 @@ class PostsApiTestsPrivate(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], limit * offset)
         self.assertEqual(len(response.data["results"]), limit)
+
+    def test_filter_posts_by_author(self):
+        """
+        Test filtering posts in GET request by author
+
+        Author can be either last name or first name
+
+        example: GET /posts/?author=Masha
+        """
+        self.client.force_authenticate(self.user)
+        _ = self.create_post(title=f"{self.user.first_name}' Post")
+        _ = self.create_post(title=f"{self.user.first_name}' Post")
+
+        self.client.force_authenticate(self.second_user)
+        _ = self.create_post(title=f"{self.second_user.first_name}' Post")
+
+        response = self.client.get(
+            f"{self.base_url}?author={self.user.first_name}"
+        )
+        self.assertEqual(len(response.data), 2)
+
+        response = self.client.get(
+            f"{self.base_url}?author={self.second_user.first_name}"
+        )
+        self.assertEqual(len(response.data), 1)
+
+    def test_filter_posts_by_author_id(self):
+        """
+        Test filtering posts in GET request by author id
+
+        example: GET /posts/?authorId=31
+        """
+        self.client.force_authenticate(self.user)
+        _ = self.create_post(title=f"{self.user.first_name}' Post")
+        _ = self.create_post(title=f"{self.user.first_name}' Post")
+
+        self.client.force_authenticate(self.second_user)
+        _ = self.create_post(title=f"{self.second_user.first_name}' Post")
+
+        response = self.client.get(f"{self.base_url}?authorId={self.user.id}")
+        self.assertEqual(len(response.data), 2)
+
+        response = self.client.get(
+            f"{self.base_url}?authorId={self.second_user.id}"
+        )
+        self.assertEqual(len(response.data), 1)
+
+    def test_filter_posts_by_author_email(self):
+        """
+        Test filtering posts in GET request by author email
+
+        example: GET /posts/?email=ivan.ivanov@mail.ru
+        """
+        self.client.force_authenticate(self.user)
+        _ = self.create_post(title=f"{self.user.first_name}' Post")
+        _ = self.create_post(title=f"{self.user.first_name}' Post")
+
+        self.client.force_authenticate(self.second_user)
+        _ = self.create_post(title=f"{self.second_user.first_name}' Post")
+
+        response = self.client.get(f"{self.base_url}?email={self.user.email}")
+        self.assertEqual(len(response.data), 2)
+
+        response = self.client.get(
+            f"{self.base_url}?email={self.second_user.email}"
+        )
+        self.assertEqual(len(response.data), 1)
 
 
 class PostsApiTestsPublic(APITestCase):
