@@ -15,7 +15,6 @@ class Posts(models.Model):
     Model for Posts
     """
 
-    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     text = models.TextField(null=False, blank=False)
     cover_path = models.ImageField(
