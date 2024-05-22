@@ -45,6 +45,8 @@ class PostsApiTestsPrivate(APITestCase):
     def test_create_post(self):
         """
         Ensure the authenticated user can create a new post by POST request
+
+        Check that we have access for created post by id
         """
         path_to_test_image = "./posts_app/defaultImage.jpeg"
         file = File(open(path_to_test_image, "rb"))
@@ -62,6 +64,14 @@ class PostsApiTestsPrivate(APITestCase):
             self.base_url, post_data, format="multipart"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        post_id = response.data["id"]
+        get_post_by_id_response = self.client.get(
+            f"{self.base_url} {post_id}/"
+        )
+        self.assertEqual(
+            get_post_by_id_response.status_code, status.HTTP_200_OK
+        )
 
     def create_post(self, title="Post title", text="Post text") -> int:
         """
