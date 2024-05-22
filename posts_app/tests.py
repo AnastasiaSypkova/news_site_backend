@@ -89,8 +89,10 @@ class PostsApiTestsPrivate(APITestCase):
             "cover_path": uploaded_file,
             "tags": "tag1 tag2",
         }
-        self.client.post(self.base_url, post_data, format="multipart")
-        post_id = Posts.objects.first().id
+        response = self.client.post(
+            self.base_url, post_data, format="multipart"
+        )
+        post_id = response.data["id"]
         return post_id
 
     def test_edit_post(self):
@@ -213,7 +215,7 @@ class PostsApiTestsPrivate(APITestCase):
         """
         Test filtering posts in GET request by author email
 
-        example: GET /posts/?email=ivan.ivanov@mail.ru
+        example: GET /posts/?author=ivan.ivanov@mail.ru
         """
         self.client.force_authenticate(self.user)
         _ = self.create_post(title=f"{self.user.first_name}' Post Number One")
@@ -224,11 +226,11 @@ class PostsApiTestsPrivate(APITestCase):
             title=f"{self.second_user.first_name}' Post Single"
         )
 
-        response = self.client.get(f"{self.base_url}?email={self.user.email}")
+        response = self.client.get(f"{self.base_url}?author={self.user.email}")
         self.assertEqual(len(response.data), 2)
 
         response = self.client.get(
-            f"{self.base_url}?email={self.second_user.email}"
+            f"{self.base_url}?author={self.second_user.email}"
         )
         self.assertEqual(len(response.data), 1)
 
