@@ -80,7 +80,7 @@ class PostsApiTestsPrivate(APITestCase):
             "tags": "tag1 tag2",
         }
         self.client.post(self.base_url, post_data, format="multipart")
-        post_id = Posts.objects.all()[0].id
+        post_id = Posts.objects.first().id
         return post_id
 
     def test_edit_post(self):
@@ -326,7 +326,7 @@ class PostsApiTestsPublic(APITestCase):
             "tags": "tag1 tag2",
         }
         self.client.post(self.base_url, post_data, format="multipart")
-        post_id = Posts.objects.all()[0].id
+        post_id = Posts.objects.first().id
         self.client.logout()
         return post_id
 
