@@ -28,8 +28,8 @@ Apply migrations\
 Start application\
 ```make startapp name="application_name" ```
 
-Run django tests\
-```make run-tests```
+Run django tests for specific application\
+```make run-tests name="application_name"```
 
 Create superuser\
 ```make createsuperuser```

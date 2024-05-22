@@ -1,3 +1,3 @@
 [flake8]
 extend-ignore = E501
-exclude = users_app/migrations
+exclude = users_app/migrations posts_app/migrations

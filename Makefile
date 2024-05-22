@@ -23,7 +23,7 @@ startapp:
 
 .PHONY: run-tests
 run-tests:
-	poetry run python manage.py test
+	poetry run python manage.py test $(name)
 
 .PHONY: createsuperuser
 createsuperuser:

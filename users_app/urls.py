@@ -8,19 +8,16 @@ from users_app.views import (
 )
 
 router = routers.DefaultRouter()
-router.register(r"users", UserViewSet)
+router.register("", UserViewSet)
 
 signup_user = UserViewSet.as_view({"post": "create"})
 urlpatterns = [
-    path("auth/signup/", signup_user, name="sign_up_user"),
+    path("signup/", signup_user, name="sign_up_user"),
     path(
-        "auth/login/",
+        "login/",
         MyTokenObtainPairView.as_view(),
         name="token_obtain_pair",
     ),
-    path("auth/whoami/", GetUserByTokenView.as_view(), name="whoami"),
-    path(
-        "api-auth/", include("rest_framework.urls", namespace="rest_framework")
-    ),
+    path("whoami/", GetUserByTokenView.as_view(), name="whoami"),
     path("", include(router.urls)),
 ]

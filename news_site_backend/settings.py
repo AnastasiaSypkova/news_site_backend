@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "users_app",
     "rest_framework_simplejwt",
+    "posts_app",
 ]
 
 MIDDLEWARE = [
@@ -125,8 +126,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+STATIC_URL = "/static/"
 
-STATIC_URL = "static/"
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
@@ -142,7 +147,9 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "ORDERING_PARAM": "order",
 }
 
 SIMPLE_JWT = {
