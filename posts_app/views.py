@@ -11,13 +11,14 @@ class CustomFilterBackend(filters.BaseFilterBackend):
     implement filtering against query set parameters
 
     Filtering by author id, author first and last name,
-    author email, and text to search in post title and post text
+    author email, tags and text to search in post title and post text
     """
 
     def filter_queryset(self, request, queryset, view):
         queryset = Posts.objects.all()
         author = request.query_params.get("author")
         author_query_id = request.query_params.get("authorId")
+        tags = request.query_params.get("tags")
         if author:
             queryset = queryset.filter(author__first_name=author)
             if not queryset:
@@ -26,6 +27,10 @@ class CustomFilterBackend(filters.BaseFilterBackend):
                 queryset = Posts.objects.all().filter(author__email=author)
         if author_query_id:
             queryset = queryset.filter(author_id=author_query_id)
+        if tags:
+            tags = tags.split()
+            for tag in tags:
+                queryset = queryset.filter(tags__icontains=tag)
 
         return queryset
 
