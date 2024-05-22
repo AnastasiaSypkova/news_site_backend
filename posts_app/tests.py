@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
@@ -48,7 +49,7 @@ class PostsApiTestsPrivate(APITestCase):
 
         Check that we have access for created post by id
         """
-        path_to_test_image = "./posts_app/defaultImage.jpeg"
+        path_to_test_image = finders.find("defaultImage.jpeg")
         file = File(open(path_to_test_image, "rb"))
         uploaded_file = SimpleUploadedFile(
             "new_image.jpg", file.read(), content_type="multipart/form-data"
@@ -77,7 +78,7 @@ class PostsApiTestsPrivate(APITestCase):
         """
         Helper function that creates post and returns post_id
         """
-        path_to_test_image = "./posts_app/defaultImage.jpeg"
+        path_to_test_image = finders.find("defaultImage.jpeg")
         file = File(open(path_to_test_image, "rb"))
         uploaded_file = SimpleUploadedFile(
             "new_image.jpg", file.read(), content_type="multipart/form-data"
@@ -303,7 +304,7 @@ class PostsApiTestsPublic(APITestCase):
         """
         Ensure the unauthenticated user can't create a new post by POST request
         """
-        path_to_test_image = "./posts_app/defaultImage.jpeg"
+        path_to_test_image = finders.find("defaultImage.jpeg")
         file = File(open(path_to_test_image, "rb"))
         uploaded_file = SimpleUploadedFile(
             "new_image.jpg", file.read(), content_type="multipart/form-data"
@@ -331,7 +332,7 @@ class PostsApiTestsPublic(APITestCase):
             "authenticated_usere@mail.ru", "password"
         )
         self.client.force_authenticate(user=self.user)
-        path_to_test_image = "./posts_app/defaultImage.jpeg"
+        path_to_test_image = finders.find("defaultImage.jpeg")
         file = File(open(path_to_test_image, "rb"))
         uploaded_file = SimpleUploadedFile(
             "new_image.jpg", file.read(), content_type="multipart/form-data"
