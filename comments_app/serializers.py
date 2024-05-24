@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from comments_app.models import Comments
 from posts_app.models import Posts
+from users_app.serializers import UserSerializer
 
 
 class CommentsSerializer(serializers.ModelSerializer):
@@ -10,15 +11,18 @@ class CommentsSerializer(serializers.ModelSerializer):
     """
 
     post_id = serializers.PrimaryKeyRelatedField(
-        source="post", queryset=Posts.objects.all(), write_only=True
+        source="post", queryset=Posts.objects.all()
+    )
+    author = UserSerializer(read_only=True)
+    author_id = serializers.PrimaryKeyRelatedField(
+        source="author", read_only=True
     )
 
     class Meta:
         model = Comments
-        fields = "__all__"
+        exclude = ["post"]
         extra_kwargs = {
             "author": {"read_only": True},
-            "post": {"read_only": True},
         }
 
     def create(self, validated_data):
