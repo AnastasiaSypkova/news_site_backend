@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from posts_app.models import Posts
+from users_app.serializers import UserSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -10,6 +11,10 @@ class PostSerializer(serializers.ModelSerializer):
 
     comments_count = serializers.IntegerField(
         source="comments.count", read_only=True
+    )
+    author = UserSerializer(read_only=True)
+    author_id = serializers.PrimaryKeyRelatedField(
+        source="author", read_only=True
     )
 
     class Meta:
