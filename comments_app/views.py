@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from comments_app.models import Comments
 from comments_app.serializers import CommentsSerializer
+from news_site_backend.permissions import EditeOwnObject, ReadOnly
 
 
 class CommentsViewSet(viewsets.ModelViewSet):
@@ -14,4 +15,4 @@ class CommentsViewSet(viewsets.ModelViewSet):
 
     serializer_class = CommentsSerializer
     queryset = Comments.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, EditeOwnObject | ReadOnly]

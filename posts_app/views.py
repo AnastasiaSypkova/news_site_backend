@@ -1,7 +1,7 @@
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from news_site_backend.permissions import EditeOwnPost, ReadOnly
+from news_site_backend.permissions import EditeOwnObject, ReadOnly
 from posts_app.models import Posts
 from posts_app.serializers import PostSerializer
 
@@ -45,7 +45,10 @@ class PostsViewSet(viewsets.ModelViewSet):
 
     serializer_class = PostSerializer
     queryset = Posts.objects.all()
-    permission_classes = [IsAuthenticated | ReadOnly, EditeOwnPost | ReadOnly]
+    permission_classes = [
+        IsAuthenticated | ReadOnly,
+        EditeOwnObject | ReadOnly,
+    ]
     filter_backends = [
         CustomFilterBackend,
         filters.SearchFilter,
