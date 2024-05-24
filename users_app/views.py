@@ -1,3 +1,5 @@
+from django.db.models import Avg, Value
+from django.db.models.functions import Coalesce
 from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,7 +13,9 @@ from users_app.serializers import MyTokenObtainPairSerializer, UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     """Viewset for endpoints assotiated with user model"""
 
-    queryset = MyUser.objects.all()
+    queryset = MyUser.objects.annotate(
+        rating=Coalesce(Avg("posts__rating"), Value(0.0))
+    )
     serializer_class = UserSerializer
     permission_classes = [
         IsAuthenticated | ReadOnly,

@@ -9,6 +9,8 @@ class UserSerializer(serializers.ModelSerializer):
     Serializer for custom user model
     """
 
+    rating = serializers.FloatField(read_only=True, default=0)
+
     class Meta:
         model = MyUser
         fields = [
@@ -18,6 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
             "avatar_path",
             "email",
             "password",
+            "rating",
             "created_at",
             "updated_at",
         ]
