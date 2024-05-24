@@ -8,9 +8,14 @@ class PostSerializer(serializers.ModelSerializer):
     Serializer for post model
     """
 
+    comments_count = serializers.IntegerField(
+        source="comments.count", read_only=True
+    )
+
     class Meta:
         model = Posts
         fields = "__all__"
+
         extra_kwargs = {
             "comments_count": {"read_only": True},
             "author": {"read_only": True},

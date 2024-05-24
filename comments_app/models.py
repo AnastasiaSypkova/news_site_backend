@@ -11,6 +11,8 @@ class Comments(models.Model):
 
     text = models.CharField(max_length=255)
     author = models.ForeignKey(MyUser, on_delete=models.CASCADE)
-    post = models.ForeignKey(Posts, on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Posts, related_name="comments", on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

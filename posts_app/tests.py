@@ -182,12 +182,12 @@ class PostsApiTestsPrivate(APITestCase):
         response = self.client.get(
             f"{self.base_url}?author={self.user.first_name}"
         )
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data["posts"]), 2)
 
         response = self.client.get(
             f"{self.base_url}?author={self.second_user.first_name}"
         )
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data["posts"]), 1)
 
     def test_filter_posts_by_author_id(self):
         """
@@ -205,12 +205,12 @@ class PostsApiTestsPrivate(APITestCase):
         )
 
         response = self.client.get(f"{self.base_url}?authorId={self.user.id}")
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data["posts"]), 2)
 
         response = self.client.get(
             f"{self.base_url}?authorId={self.second_user.id}"
         )
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data["posts"]), 1)
 
     def test_filter_posts_by_author_email(self):
         """
@@ -228,12 +228,12 @@ class PostsApiTestsPrivate(APITestCase):
         )
 
         response = self.client.get(f"{self.base_url}?author={self.user.email}")
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data["posts"]), 2)
 
         response = self.client.get(
             f"{self.base_url}?author={self.second_user.email}"
         )
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data["posts"]), 1)
 
     def test_search(self):
         """
@@ -280,10 +280,14 @@ class PostsApiTestsPrivate(APITestCase):
         response = self.client.get(
             f"{self.base_url}?search=Термоядерный синтез"
         )
-        self.assertEqual(response.data[0]["title"], "Планетарные туманности")
+        self.assertEqual(
+            response.data["posts"][0]["title"], "Планетарные туманности"
+        )
 
         response = self.client.get(f"{self.base_url}?search=Ньютон")
-        self.assertEqual(response.data[0]["title"], "Новость про радугу")
+        self.assertEqual(
+            response.data["posts"][0]["title"], "Новость про радугу"
+        )
 
 
 class PostsApiTestsPublic(APITestCase):
