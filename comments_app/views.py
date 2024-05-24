@@ -1,5 +1,6 @@
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from comments_app.models import Comments
 from comments_app.serializers import CommentsSerializer
@@ -33,3 +34,14 @@ class CommentsViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, EditeOwnObject | ReadOnly]
     filter_backends = [FilterByPostIdBackend]
     filterset_fields = ["post"]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"comments": serializer.data, "total": len(queryset)})
