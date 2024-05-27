@@ -9,6 +9,8 @@ class UserSerializer(serializers.ModelSerializer):
     Serializer for custom user model
     """
 
+    rating = serializers.FloatField(read_only=True, default=0)
+
     class Meta:
         model = MyUser
         fields = [
@@ -18,10 +20,20 @@ class UserSerializer(serializers.ModelSerializer):
             "avatar_path",
             "email",
             "password",
+            "rating",
             "created_at",
             "updated_at",
         ]
         extra_kwargs = {"password": {"write_only": True}}
+
+    def to_representation(self, instance):
+        """
+        Make image file path relative
+        """
+        response = super(UserSerializer, self).to_representation(instance)
+        if instance.avatar_path:
+            response["avatar_path"] = instance.avatar_path.url
+        return response
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

@@ -1,4 +1,6 @@
-from rest_framework import generics, viewsets
+from django.db.models import Avg, Value
+from django.db.models.functions import Coalesce
+from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -11,7 +13,9 @@ from users_app.serializers import MyTokenObtainPairSerializer, UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     """Viewset for endpoints assotiated with user model"""
 
-    queryset = MyUser.objects.all()
+    queryset = MyUser.objects.annotate(
+        rating=Coalesce(Avg("posts__rating"), Value(0.0))
+    )
     serializer_class = UserSerializer
     permission_classes = [
         IsAuthenticated | ReadOnly,
@@ -44,6 +48,8 @@ class GetUserByTokenView(generics.ListAPIView):
         """
         Return a list of all users.
         """
-        queryset = MyUser.objects.get(id=self.request.user.id)
-        serializer = UserSerializer(queryset)
-        return Response(serializer.data)
+        if self.request.user.id:
+            queryset = MyUser.objects.get(id=self.request.user.id)
+            serializer = UserSerializer(queryset)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)

@@ -20,9 +20,10 @@ class Posts(models.Model):
     cover_path = models.ImageField(
         upload_to=upload_cover, blank=False, null=False
     )
-    author = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        MyUser, related_name="posts", on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    comments_count = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)
     tags = models.CharField(max_length=255)

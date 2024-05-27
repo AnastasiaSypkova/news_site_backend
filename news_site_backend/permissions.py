@@ -34,9 +34,9 @@ class UpdateOwnProfile(BasePermission):
             return False
 
 
-class EditeOwnPost(BasePermission):
+class EditeOwnObject(BasePermission):
     """
-    Grant user permission to edit or delete its own news
+    Grant user permission to edit or delete its own news/comments
     """
 
     def has_object_permission(self, request, view, obj):
