@@ -29,3 +29,14 @@ class PostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["author"] = self.context["request"].user
         return super().create(validated_data)
+
+    def to_representation(self, instance):
+        """
+        Make image file path relative
+        """
+        response = super(PostSerializer, self).to_representation(instance)
+        if instance.cover_path:
+            response["cover_path"] = instance.cover_path.url
+        if instance.author.avatar_path:
+            response["author"]["avatar_path"] = instance.author.avatar_path.url
+        return response
