@@ -16,7 +16,7 @@ class FilterByPostIdBackend(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         queryset = Comments.objects.all()
-        post_id = request.query_params.get("post")
+        post_id = request.query_params.get("postId")
         if post_id:
             queryset = queryset.filter(post__id=post_id)
         return queryset
