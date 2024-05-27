@@ -82,14 +82,14 @@ class UserApiTestsPrivate(APITestCase):
         MyUser = get_user_model()
 
         users_list = self.client.get(self.base_url).data
-        initial_len = len(users_list)
+        initial_len = users_list["total"]
 
         data = {"email": "new_user@maail.com", "password": "password"}
         response = self.client.post(self.base_url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         users_list = self.client.get(self.base_url).data
-        self.assertEqual(len(users_list), initial_len + 1)
+        self.assertEqual(users_list["total"], initial_len + 1)
 
         self.assertEqual(MyUser.objects.last().email, "new_user@maail.com")
 
@@ -184,13 +184,13 @@ class UserApiTestsPublic(APITestCase):
         MyUser = get_user_model()
 
         users_list = self.client.get(self.base_url).data
-        initial_len = len(users_list)
+        initial_len = users_list["total"]
 
         data = {"email": "new_user@maail.com", "password": "password"}
         response = self.client.post(self.base_url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         users_list = self.client.get(self.base_url).data
-        self.assertEqual(len(users_list), initial_len + 1)
+        self.assertEqual(users_list["total"], initial_len + 1)
 
         self.assertEqual(MyUser.objects.last().email, "new_user@maail.com")
