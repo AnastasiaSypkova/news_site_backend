@@ -19,7 +19,7 @@ class CustomFilterBackend(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         queryset_annotated = Posts.objects.annotate(
             comments_count=Count("comments")
-        ).all()
+        )
 
         author = request.query_params.get("author")
         author_query_id = request.query_params.get("authorId")
