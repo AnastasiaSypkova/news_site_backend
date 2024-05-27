@@ -1,4 +1,5 @@
-from django.db.models import Count
+from django.db.models import Count, Value
+from django.db.models.functions import Coalesce
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -18,7 +19,7 @@ class CustomFilterBackend(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         queryset_annotated = Posts.objects.annotate(
-            comments_count=Count("comments")
+            comments_count=Coalesce(Count("comments"), Value(0))
         )
 
         author = request.query_params.get("author")
@@ -49,7 +50,9 @@ class PostsViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = PostSerializer
-    queryset = Posts.objects.annotate(comments_count=Count("comments")).all()
+    queryset = Posts.objects.annotate(
+        comments_count=Coalesce(Count("comments"), Value(0))
+    )
     permission_classes = [
         IsAuthenticated | ReadOnly,
         EditeOwnObject | ReadOnly,
