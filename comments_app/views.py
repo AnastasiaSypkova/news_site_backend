@@ -45,4 +45,4 @@ class CommentsViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
 
-        return Response({"comments": serializer.data, "total": len(queryset)})
+        return Response({"results": serializer.data, "total": len(queryset)})
