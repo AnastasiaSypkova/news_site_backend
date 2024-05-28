@@ -27,6 +27,17 @@ class UserViewSet(viewsets.ModelViewSet):
             return []
         return super().get_permissions()
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"results": serializer.data, "total": len(queryset)})
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     """View for auth/login endpoint

@@ -23,7 +23,8 @@ class CustomFilterBackend(filters.BaseFilterBackend):
         )
 
         author = request.query_params.get("author")
-        author_query_id = request.query_params.get("authorId")
+        author_query_id = request.query_params.get("author_id")
+        print("ID AUTHOR:", author_query_id, request.query_params)
         tags = request.query_params.get("tags")
         if author:
             queryset = queryset_annotated.filter(author__first_name=author)
@@ -76,4 +77,5 @@ class PostsViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response({"posts": serializer.data, "total": len(queryset)})
+
+        return Response({"results": serializer.data, "total": len(queryset)})
