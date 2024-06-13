@@ -86,13 +86,16 @@ WSGI_APPLICATION = "news_site_backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+from dotenv import load_dotenv
+
+load_dotenv()
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "postgres",
-        "USER": "user",
-        "PASSWORD": "password",
-        "HOST": "host",
+        "NAME": os.getenv('DB_NAME'),
+        "USER": os.getenv('DB_USER'),
+        "PASSWORD": os.getenv('DB_PASSWORD'),
+        "HOST": os.getenv('HOST'),
         "PORT": "port",
     }
 }
