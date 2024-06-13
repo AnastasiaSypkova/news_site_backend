@@ -1,0 +1,32 @@
+# docker-compose.yml
+version: "3"
+services:
+  django-server: #name of service with django server
+    build: . #path to Dockerfile
+    container_name: django
+    command: bash ./entry.sh
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env-docker
+    ports:
+      - 8000:8000
+    depends_on:
+      - postresql-db
+  postresql-db: #name of service with postgres database
+    image: postgres:16.3
+    container_name: pgdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env-docker
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    ports:
+      - "0.0.0.0:5432:5432"
+
+volumes:
+  postgres_data:
