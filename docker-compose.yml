@@ -1,5 +1,4 @@
 # docker-compose.yml
-version: "3"
 services:
   django-server: #name of service with django server
     build: . #path to Dockerfile
